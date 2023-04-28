@@ -3,11 +3,13 @@ import pandas as pd
 import tkinter as tk
 from tkinter import filedialog, messagebox
 
+
 def choose_csv_file():
     root = tk.Tk()
     root.withdraw()
     file_path = filedialog.askopenfilename(filetypes=[("CSV files", "*.csv")])
     return file_path
+
 
 def get_students_from_db(database_connection, table_name):
     cursor = database_connection.cursor()
@@ -17,6 +19,7 @@ def get_students_from_db(database_connection, table_name):
 
     cursor.close()
     return students
+
 
 def get_students_from_csv(data):
     students = {}
@@ -28,6 +31,7 @@ def get_students_from_csv(data):
             first_name, last_name = 'Unknown', full_name
         students[row['StudentID']] = f"{first_name} {last_name}"
     return students
+
 
 def update_incentive(database_connection, table_name, data):
     cursor = database_connection.cursor()
@@ -41,11 +45,11 @@ def update_incentive(database_connection, table_name, data):
     database_connection.commit()
     cursor.close()
 
+
 csv_file = choose_csv_file()
 # Update the 'usecols' and 'names' parameters to match the correct column names in the CSV file
 data = pd.read_csv(csv_file, usecols=['StudId', 'StudName', 'IncGrpName'])
 data.rename(columns={'StudId': 'StudentID', 'StudName': 'Name', 'IncGrpName': 'Incentive'}, inplace=True)
-
 
 config = {
     'user': 'root',
